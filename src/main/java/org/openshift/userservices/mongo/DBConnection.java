@@ -70,8 +70,7 @@ public class DBConnection {
 			System.out.println("The database is empty.  We need to populate it");
 			try {
 				String currentLine = new String();
-				URL jsonFile = new URL(
-						"http://163.162.61.163/cloud-repo/openshift/userservices.json");
+				URL jsonFile = new URL("https://raw.githubusercontent.com/sdellang/Ose3UserService/master/users.json");
 				BufferedReader in = new BufferedReader(new InputStreamReader(jsonFile.openStream()));
 				while ((currentLine = in.readLine()) != null) {
 					parkListCollection.insert((DBObject) JSON.parse(currentLine.toString()));
