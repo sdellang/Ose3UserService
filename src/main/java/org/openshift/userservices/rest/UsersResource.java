@@ -31,7 +31,7 @@ public class UsersResource {
 		theUser.setName((String)dataValue.get("name"));
 		theUser.setSurname((String)dataValue.get("surname"));
 		theUser.setEmail((String)dataValue.get("email"));
-		theUser.setConfirmed((Boolean)dataValue.get("confirmed"));
+		theUser.setConfirmed(Boolean.valueOf((String)dataValue.get("confirmed")));
 		return theUser;
 	}
 
