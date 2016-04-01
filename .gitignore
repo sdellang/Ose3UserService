@@ -80,6 +80,8 @@ local.properties
 # PDT-specific
 .buildpath
 
+.idea
+
 ######################
 # Jboss
 ######################
