@@ -72,7 +72,7 @@ public class UsersResource {
 		DBCursor cursor = users.find(query);
 		try {
 			while (cursor.hasNext()) {
-				this.populateParkInformation(cursor.next());
+				foundUser = this.populateParkInformation(cursor.next());
 			}
 		} finally {
 			cursor.close();
@@ -101,7 +101,7 @@ public class UsersResource {
 		DBCursor cursor = users.find(query);
 		try {
 			while (cursor.hasNext()) {
-				this.populateParkInformation(cursor.next());
+				foundUser = this.populateParkInformation(cursor.next());
 			}
 		} finally {
 			cursor.close();
