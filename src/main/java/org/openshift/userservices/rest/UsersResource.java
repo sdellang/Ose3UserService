@@ -1,8 +1,8 @@
-package org.openshift.mlbparks.userservices.rest;
+package org.openshift.userservices.rest;
 
 import com.mongodb.*;
-import org.openshift.mlbparks.domain.User;
-import org.openshift.mlbparks.mongo.DBConnection;
+import org.openshift.userservices.domain.User;
+import org.openshift.userservices.mongo.DBConnection;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;

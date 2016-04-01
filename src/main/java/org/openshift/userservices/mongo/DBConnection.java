@@ -1,4 +1,4 @@
-package org.openshift.mlbparks.userservices.mongo;
+package org.openshift.userservices.mongo;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;

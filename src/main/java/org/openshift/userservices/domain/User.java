@@ -1,4 +1,4 @@
-package org.openshift.mlbparks.userservices.domain;
+package org.openshift.userservices.domain;
 
 
 public class User {
