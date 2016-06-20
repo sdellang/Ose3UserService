@@ -1,6 +1,6 @@
 package org.openshift.userservices.rest;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
 import org.openshift.userservices.domain.User;
 import org.openshift.userservices.mongo.DBConnection;
 
@@ -8,103 +8,52 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequestScoped
 @Path("/parks")
 public class UsersResource {
 
-	@Inject
-	private DBConnection dbConnection;
+    private final DBConnection dbConnection;
 
-	private DBCollection getUsersCollection() {
-		DB db = dbConnection.getDB();
-		DBCollection parkListCollection = db.getCollection("users");
+    @Inject
+    public UsersResource(DBConnection dbConnection) {
+        this.dbConnection = dbConnection;
+    }
 
-		return parkListCollection;
-	}
+    @GET()
+    @Produces("application/json")
+    public List<User> getAllUsers() {
+        return dbConnection.findAllUsers();
+    }
 
-
-
-	private User populateParkInformation(DBObject dataValue) {
-
-		User theUser = new User();
-		theUser.setName((String)dataValue.get("name"));
-		theUser.setSurname((String)dataValue.get("surname"));
-		theUser.setEmail((String)dataValue.get("email"));
-		theUser.setConfirmed(Boolean.valueOf((String)dataValue.get("confirmed")));
-		return theUser;
-	}
-
-	// get all the mlb parks
-	@GET()
-	@Produces("application/json")
-	public List<User> getAllUsers() {
-		ArrayList<User> allUserList = new ArrayList<User>();
-
-		DBCollection mlbParks = this.getUsersCollection();
-
-        return dbConnection.findUser(mlbParks);
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("findmail")
+    public User findByEmail(@QueryParam("email") String email) {
+        // make the query object
+        BasicDBObject query = new BasicDBObject("email", email);
+        System.out.println("query by email: " + query.toString());
+        return dbConnection.findUser(query);
+    }
 
 
-	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("findmail")
-	public User findByEmail(@QueryParam("email") String email) {
-
-		User foundUser = new User();
-		DBCollection users = this.getUsersCollection();
-
-		// make the query object
-		BasicDBObject query = new BasicDBObject("email",email);
-
-		System.out.println("query by email: " + query.toString());
-
-        return dbConnection.findUser(users,query).get(0);
-	}
-
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("findname")
-	public User findByEmail(@QueryParam("name") String name, @QueryParam("surname") String surname) {
-
-		User foundUser = new User();
-		DBCollection users = this.getUsersCollection();
-
-		// make the query object
-		BasicDBObject query = new BasicDBObject("name",name)
-				.append("surname",surname);
-
-		System.out.println("query by name: " + query.toString());
-
-
-
-		DBCursor cursor = users.find(query);
-		try {
-			while (cursor.hasNext()) {
-				foundUser = this.populateParkInformation(cursor.next());
-			}
-		} finally {
-			cursor.close();
-		}
-
-		return foundUser;
-	}
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("findname")
+    public User findByNameAndSurname(@QueryParam("name") String name, @QueryParam("surname") String surname) {
+        // make the query object
+        BasicDBObject query = new BasicDBObject("name", name).append("surname", surname);
+        System.out.println("query by name: " + query.toString());
+        return dbConnection.findUser(query);
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("insertUser")
     public void insertUser(User toUser) {
-
-        DBCollection users = this.getUsersCollection();
-        BasicDBObject document = new BasicDBObject("name",toUser.getName()).append("surname",toUser.getSurname())
-                .append("email",toUser.getEmail()).append("confirmed",toUser.getConfirmed());
-
-        users.insert(document, WriteConcern.SAFE);
-
+        BasicDBObject document = new BasicDBObject("name", toUser.getName()).append("surname", toUser.getSurname())
+                .append("email", toUser.getEmail()).append("confirmed", toUser.getConfirmed());
+        dbConnection.insertUser(document);
     }
 }
