@@ -1,10 +1,8 @@
 package org.openshift.userservices.mongo;
 
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
+import com.mongodb.*;
 import com.mongodb.util.JSON;
+import org.openshift.userservices.domain.User;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -13,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Named
 @ApplicationScoped
@@ -82,6 +82,44 @@ public class DBConnection {
 				e.printStackTrace();
 			}
 		}
+	}
+
+    public List<User> findUser(DBCollection collection) {
+        return this.findUser(collection,null);
+    }
+
+	public List<User> findUser(DBCollection collection, BasicDBObject query) {
+
+		DBCursor cursor;
+		List<User> allUserList = new ArrayList<>();
+
+		if(query == null) {
+			cursor = collection.find();
+		} else {
+			cursor = collection.find(query);
+		}
+
+		if(cursor != null) {
+			try {
+				while (cursor.hasNext()) {
+					allUserList.add(this.populateParkInformation(cursor.next()));
+				}
+			} finally {
+				cursor.close();
+			}
+		}
+
+		return allUserList;
+	}
+
+	private User populateParkInformation(DBObject dataValue) {
+
+		User theUser = new User();
+		theUser.setName((String)dataValue.get("name"));
+		theUser.setSurname((String)dataValue.get("surname"));
+		theUser.setEmail((String)dataValue.get("email"));
+		theUser.setConfirmed(Boolean.valueOf((String)dataValue.get("confirmed")));
+		return theUser;
 	}
 
 }

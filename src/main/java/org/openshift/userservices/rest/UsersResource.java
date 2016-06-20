@@ -25,6 +25,8 @@ public class UsersResource {
 		return parkListCollection;
 	}
 
+
+
 	private User populateParkInformation(DBObject dataValue) {
 
 		User theUser = new User();
@@ -42,16 +44,10 @@ public class UsersResource {
 		ArrayList<User> allUserList = new ArrayList<User>();
 
 		DBCollection mlbParks = this.getUsersCollection();
-		DBCursor cursor = mlbParks.find();
-		try {
-			while (cursor.hasNext()) {
-				allUserList.add(this.populateParkInformation(cursor.next()));
-			}
-		} finally {
-			cursor.close();
-		}
 
-		return allUserList;
+        return dbConnection.findUser(mlbParks);
+
+
 	}
 
 	@GET
@@ -67,18 +63,7 @@ public class UsersResource {
 
 		System.out.println("query by email: " + query.toString());
 
-
-
-		DBCursor cursor = users.find(query);
-		try {
-			while (cursor.hasNext()) {
-				foundUser = this.populateParkInformation(cursor.next());
-			}
-		} finally {
-			cursor.close();
-		}
-
-		return foundUser;
+        return dbConnection.findUser(users,query).get(0);
 	}
 
 
