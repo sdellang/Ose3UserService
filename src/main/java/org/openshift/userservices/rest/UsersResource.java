@@ -14,9 +14,12 @@ import java.util.List;
 @Path("/parks")
 public class UsersResource {
 
-    private final DBConnection dbConnection;
-
     @Inject
+    private DBConnection dbConnection;
+
+    public UsersResource() {};
+
+
     public UsersResource(DBConnection dbConnection) {
         this.dbConnection = dbConnection;
     }
