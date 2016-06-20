@@ -1,0 +1,4 @@
+NO_PROXY=.cluster.local,10.20.30.10,10.20.30.6,10.20.30.7,10.20.30.8,10.20.30.9,172.30.0.0/16
+HTTP_PROXY=http://10.31.128.200:3128
+HTTPS_PROXY=http://10.31.128.200:3128
+MAVEN_ARGS=package -Popenshift -DskipTests -Dcom.redhat.xpaas.repo.redhatga -ssettings.xml

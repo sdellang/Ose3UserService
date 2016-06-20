@@ -1,0 +1,44 @@
+<settings>
+
+    <proxies>
+        <proxy>
+            <active>true</active>
+            <protocol>http</protocol>
+            <host>10.31.128.200</host>
+            <port>3128</port>
+            <nonProxyHosts>.cluster.local,10.20.30.10,10.20.30.6,10.20.30.7,10.20.30.8,10.20.30.9,172.30.0.0/16</nonProxyHosts>
+        </proxy>
+    </proxies>
+    <profiles>
+        <profile>
+            <repositories>
+                <repository>
+                    <id>eap</id>
+                    <url>http://maven.repository.redhat.com/techpreview/all</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>eap</id>
+                    <url>http://maven.repository.redhat.com/techpreview/all</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+            <id>jboss-repository</id>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>jboss-repository</activeProfile>
+    </activeProfiles>
+</settings>
